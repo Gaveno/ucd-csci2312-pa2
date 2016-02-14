@@ -25,11 +25,15 @@ namespace Clustering {
             __points->point = p;
         }
         else { // Non-empty list
+            // Make sure point does not already exist
+            if (contains(p))
+                return; // Point already exists, exit
+
             // next and previous pointers
             LNodePtr next;
             LNodePtr prev;
 
-            next = __points;
+            next = __points;    // Start of list
             prev = nullptr;
 
             // find insert position
@@ -73,7 +77,23 @@ namespace Clustering {
             ++__size;
         }
     }
-    
-    const Point &Cluster::remove(const Point &);
-    bool Cluster::contains(const Point &);
+
+    const Point &Cluster::remove(const Point &p) {
+
+    }
+
+    bool Cluster::contains(const Point &p) {
+        LNodePtr next = __points;
+
+        while (next != nullptr) {
+            //  Check if ID's of the pointers match
+            if (next->point.getId() == p.getId())
+                return true;    // True, contains point
+            else
+                next = next->next;
+        }
+
+        // End of loop, does not contain point
+        return false;
+    }
 }
