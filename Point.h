@@ -39,6 +39,7 @@ namespace Clustering {
         const Point operator/(double) const; // p3 = p2 / 2;
 
         double &operator[](int index);
+        const double &operator[](int index) const;
 
         // Friends
         friend Point &operator+=(Point &, const Point &);
