@@ -29,7 +29,10 @@ namespace Clustering {
         ++__idGen;
 
         __dim = dimensions;
-        __values = array;
+        __values = new double[__dim];
+        for (int i = 0; i < __dim; ++i) {
+            __values[i] = array[i];
+        }
     }
 
     // Big three: cpy ctor, overloaded operator=, dtor
@@ -44,17 +47,20 @@ namespace Clustering {
     }
 
     Point &Point::operator=(const Point &origin) {
-        __dim = origin.__dim;
-        __id = origin.__id;
+        if (this != &origin) { // prevent p1 = p1
 
-        // If array was already assigned, delete first
-        if (__values != nullptr)
-            delete [] __values;
+            __dim = origin.__dim;
+            __id = origin.__id;
 
-        __values = new double[__dim];
+            // If array was already assigned, delete first
+            if (__values != nullptr)
+                delete[] __values;
 
-        for (int i = 0; i < __dim; ++i) {
-            __values[i] = origin.__values[i];
+            __values = new double[__dim];
+
+            for (int i = 0; i < __dim; ++i) {
+                __values[i] = origin.__values[i];
+            }
         }
 
         return *this;
@@ -93,10 +99,13 @@ namespace Clustering {
     //  Estimate distance between calling point
     //  and a second point
     double Point::distanceTo(const Point &compPoint) const {
-        int usedDim = std::min(__dim, compPoint.__dim);     // Dimensions to compare
+        //int usedDim = std::min(__dim, compPoint.__dim);     // Dimensions to compare
+        if (__dim != compPoint.__dim)
+            return false;   // Dimensions are not same, don't calculate
+
         double sumOfProducts = 0;                           // Sum of (xn2 - xn1)^2
 
-        for (int i = 0; i < usedDim; ++i) {
+        for (int i = 0; i < __dim; ++i) {
             sumOfProducts += pow(compPoint.getValue(i) - getValue(i), 2);
         }
 

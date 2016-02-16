@@ -6,6 +6,10 @@
 
 namespace Clustering {
 
+    LNode::LNode(const Point &p, LNodePtr n) : point(p) {
+        next = n;
+    }
+
     Cluster::Cluster() {
         __size = 0;
         __points = nullptr;
@@ -20,9 +24,7 @@ namespace Clustering {
         // Empty list, adding first
         if (__size == 0) {
             ++__size;
-            __points = new LNode;
-            __points->next = nullptr;
-            __points->point = p;
+            __points = new LNode(p, nullptr);
         }
         else { // Non-empty list
             // Make sure point does not already exist
@@ -42,9 +44,7 @@ namespace Clustering {
                     // Insert here
                     if (prev == nullptr) {
                         // First element in list
-                        __points = new LNode;
-                        __points->next = next;
-                        __points->point = p;
+                        __points = new LNode(p, next);
 
                         ++__size;
 
@@ -52,10 +52,7 @@ namespace Clustering {
                     }
                     else {
                         // Not first element in list
-                        prev->next = new LNode;
-                        prev->next->next = next;
-
-                        prev->next->point = p;
+                        prev->next = new LNode(next->point, next->next);
 
                         ++__size;
 
@@ -69,17 +66,46 @@ namespace Clustering {
             }
 
             // No insert found, add to end
-            prev->next = new LNode;
-            prev->next->next = nullptr;
-
-            prev->next->point = p;
+            prev->next = new LNode(p, next->next);
 
             ++__size;
         }
     }
 
     const Point &Cluster::remove(const Point &p) {
+        if (contains(p)) {
+            // Point is in list
+            LNodePtr next;
+            LNodePtr prev = nullptr;
 
+            next = __points;
+
+            while (next != nullptr) {
+                if (next->point == p) {
+                    // Found point
+                    if (prev == nullptr) {
+                        // First element
+                        __points = next->next;
+
+                        delete next;
+                        
+                        break;
+                    }
+                    else {
+                        // not first
+                        prev->next = next->next;
+                        delete next;
+
+                        break;
+                    }
+                }
+
+                prev = next;
+                next = next->next;
+            }
+        }
+
+        return p;
     }
 
     bool Cluster::contains(const Point &p) {
