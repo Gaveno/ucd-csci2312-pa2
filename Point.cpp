@@ -154,6 +154,7 @@ namespace Clustering {
     }
 
     // Read and write index
+    // WARNING: Out of bounds returns first value
     double &Point::operator[](int index) {
         //  Prevent access out of bounds
         if (index < 0 || index >= __dim)
