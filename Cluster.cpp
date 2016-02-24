@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <sstream>
+#include <iomanip>
 #include <string>
 
 #include "Cluster.h"
@@ -225,24 +226,28 @@ namespace Clustering {
     // Operators Friends
     // Friends: IO
     std::ostream &operator<<(std::ostream &out, const Cluster &cluster) {
+        out << std::setprecision(20);
         for (int i = 0; i < cluster.getSize(); ++i) {
             out << cluster[i] << std::endl;
+            //std::cout << cluster[i] << std::endl;
         }
 
         return out;
     }
     std::istream &operator>>(std::istream &in, Cluster &cluster) {
-        Point p(1);
-
         while (!in.eof()) {
+            Point p(1);
+
             std::string str;
             std::getline(in, str);
 
-            std::stringstream ss(str);
+            if (str.length() > 0) {
+                std::stringstream ss(str);
 
-            ss >> p;
+                ss >> p;
 
-            cluster.add(p);
+                cluster.add(p);
+            }
         }
 
 
