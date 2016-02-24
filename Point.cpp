@@ -6,6 +6,7 @@
 #include <algorithm> //min, max
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include "Point.h"
 
@@ -261,25 +262,33 @@ namespace Clustering {
     }
 
     std::ostream &operator<<(std::ostream &out, const Point &p) {
-        for (int i = 0; i < p.getDims(); ++i) {
-            out << p.getValue(i);
+        int i = 0;
+        for ( ; i < p.__dim - 1; ++i)
+            out << p.__values[i] << ", ";
 
-            if (i != (p.getDims() - 1))
-                out << ", "; // print out comma and space if not last element
-        }
+        out << p.__values[i];
+
     }
 
     std::istream &operator>>(std::istream &in, Point &p) {
-        std::stringstream ss;
+        //std::stringstream ss;
         std::string str;
 
-        std::getline(in, str, ',');
 
-        ss << str;
-
+        std::getline(in, str);
         int size = std::count(str.begin(), str.end(), ',') + 1;
-        double value_to_add;    // add to
-        int index = 0;  // current dimension index of point
+
+        //std::cout << "size: " << size << "   ";
+
+        /*/int pos = str.find(",");
+        while (pos != std::string::npos)
+        {
+            str.erase(pos);
+            pos = str.find(",");
+        }*/
+
+        std::stringstream ss(str);
+
 
         if (p.getDims() != size) {
             delete [] p.__values;
@@ -288,10 +297,15 @@ namespace Clustering {
             p.__values = new double [p.__dim];
         }
 
-        while (!ss.eof()) {
-            ss >> value_to_add;
+        int index = 0;  // current dimension index of point
 
-            p.setValue(index, value_to_add);
+        while (!ss.eof()) {
+            std::string svalue;
+            getline(ss, svalue, ',');
+
+            std::stringstream streamvalue(svalue);
+
+            streamvalue >> p.__values[index];
 
             ++index;
         }

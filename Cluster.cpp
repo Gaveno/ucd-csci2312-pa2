@@ -19,11 +19,25 @@ namespace Clustering {
         __points = nullptr;
     }
 
-    Cluster::Cluster(const Cluster &) {
-
+    Cluster::Cluster(const Cluster &origin) {
+        LNodePtr cursor;
+        int i = 0;
+        for (cursor = origin.__points; cursor != nullptr; cursor = cursor->next)
+        {
+            add(origin[i]);
+            ++i;
+        }
     }
 
     Cluster &Cluster::operator=(const Cluster &origin) {
+        LNodePtr cursor;
+        int i = 0;
+        for (cursor = origin.__points; cursor != nullptr; cursor = cursor->next)
+        {
+            add(origin[i]);
+            ++i;
+        }
+
         return *this;
     }
 
