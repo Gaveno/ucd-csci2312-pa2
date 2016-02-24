@@ -7,6 +7,7 @@
 #include "ErrorContext.h"
 #include "ClusteringTests.h"
 #include "Point.h"
+#include "Cluster.h"
 
 using std::cout;
 using std::endl;
@@ -15,20 +16,7 @@ using namespace Testing;
 
 int main() {
 
-    Clustering::Point p1(20);
-    Clustering::Point p2(20);
 
-    for (int i = 0; i < 20; ++i)
-    {
-        p1[i] = i;
-    }
-
-    std::stringstream ios;
-    ios << p1;
-    ios >> p2;
-
-    std::cout << p1 << endl;
-    std::cout << p2 << endl;
 
     const int NumIters = 3;
 
